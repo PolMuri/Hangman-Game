@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joc del Penjat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    .hidden-word {
+      font-size: 24px;
+      letter-spacing: 5px; /* Espai entre les lletres de la paraula amagada */
+    }
+    .message {
+      margin-top: 20px;
+      font-size: 20px;
+      color: green; /* Color verd per quan l'usuari encerti la lletra */
+    }
+    .error {
+      color: red; /* Color vermell per les equivocacions de l'usuari amb les lletres*/
+    }
+  </style>
+</head>
+<body>
+  <h1>Joc del Penjat</h1>
+  <!-- Mostrem la paraula amagada amb guions baixos inicialment -->
+  <p class="hidden-word" id="hiddenWord"></p>
+  <!-- Mostrem els intents restants -->
+  <p>Intents restants: <span id="attempts">12</span></p> <!--Aquí hem de posar el nombre de intents que es veuran per pantalla --> 
+  <!-- Entrada de text per a l'usuari per introduir una lletra -->
+  <input type="text" id="letterInput" maxlength="1" placeholder="Introdueix una lletra" />
+  <!-- Botó per comprovar la lletra introduïda -->
+  <button id="checkLetter">Comprova</button>
+  <!-- Missatge per informar sobre errors o el resultat del joc -->
+  <p class="message" id="message"></p>
+  <script>
+    // Llista de paraules possibles per al joc
+    const paraules = ['javascript', 'peluxon', 'lacti', 'montilivi', 'playstation', 'slash', 'jedi'];
+    // Es tria una paraula aleatòria de la llista
+    const paraula = paraules[Math.floor(Math.random() * paraules.length)];
+    const intentsMaxims = 12; // Configurem el nombre d'intents màxims
+
+    let intentsRestants = intentsMaxims; // Comptador d'intents restants
+    let paraulaEncertada = Array(paraula.length).fill('_'); // Creem un array per representar la paraula amagada amb guions baixos
+
+    // Referències als elements HTML del DOM per actualitzar el contingut
+    const hiddenWordElement = document.getElementById('hiddenWord');
+    const attemptsElement = document.getElementById('attempts');
+    const messageElement = document.getElementById('message');
+
+    // Mostrem la paraula amagada inicial al navegador
+    hiddenWordElement.textContent = paraulaEncertada.join(' ');
+
+
+    // Afegim un event listener per comprovar la lletra introduïda
+    document.getElementById('checkLetter').addEventListener('click', () => {
+      // Obtenim la lletra introduïda per l'usuari
+      const input = document.getElementById('letterInput'); 
+      const lletra = input.value.toLowerCase(); // Convertim a minúscules
+      input.value = ''; // Esborrem el camp d'entrada
+
+      // Validem que només s'ha introduït una lletra
+      if (!lletra || lletra.length !== 1) {
+        messageElement.textContent = 'Introdueix una lletra vàlida.';
+        messageElement.classList.add('error');
+        return;
+      }
+
+      // Reiniciem el missatge d'error
+      messageElement.textContent = '';
+      messageElement.classList.remove('error');
+
+      // Comprovem si la lletra està a la paraula
+      if (paraula.includes(lletra)) {
+        // Actualitzem les posicions on apareix la lletra encertada
+        for (let i = 0; i < paraula.length; i++) {
+          if (paraula[i] === lletra) {
+            paraulaEncertada[i] = lletra;
+          }
+        }
+      } else {
+        // Si la lletra no està a la paraula, restem els intents restants que li queden a l'usuari
+        intentsRestants--;
+        attemptsElement.textContent = intentsRestants;
+      }
+
+      // Actualitzem la paraula amagada al navegador
+      hiddenWordElement.textContent = paraulaEncertada.join(' ');
+
+      // Comprovem si el joc ha acabat
+      // Si no hi ha més guions, el jugador ha guanyat ja que tot són lletres correctes i ha encertat la paraula
+      if (!paraulaEncertada.includes('_')) {
+        messageElement.textContent = 'Felicitats! Has guanyat!';
+        document.getElementById('checkLetter').disabled = true; // Desactivem el botó
+      } else if (intentsRestants === 0) {
+        // Si no queden intents, el jugador ha perdut
+        messageElement.textContent = `Has perdut :( La paraula era: ${paraula}`;
+        messageElement.classList.add('error');
+        document.getElementById('checkLetter').disabled = true; // Desactivem el botó
+      }
+    });
+  </script>
+</body>
+</html>
