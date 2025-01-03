@@ -26,6 +26,7 @@
 </head>
 <body>
   <h1>Joc del Penjat</h1>
+  <h2>Irene, ets el meu ⬇ </h2>  <!-- A CANVIAR!! s'ha d'eliminar  -> 
   <!-- Mostrem la paraula amagada amb guions baixos inicialment -->
   <p class="hidden-word" id="hiddenWord"></p>
   <!-- Mostrem els intents restants -->
@@ -38,7 +39,7 @@
   <p class="message" id="message"></p>
   <script>
     // Llista de paraules possibles per al joc
-    const paraules = ['javascript', 'peluxon', 'lacti', 'montilivi', 'playstation', 'slash', 'jedi'];
+    const paraules = ['amor']; // -> CANVIAR
     // Es tria una paraula aleatòria de la llista
     const paraula = paraules[Math.floor(Math.random() * paraules.length)];
     const intentsMaxims = 12; // Configurem el nombre d'intents màxims
@@ -93,7 +94,7 @@
       // Comprovem si el joc ha acabat
       // Si no hi ha més guions, el jugador ha guanyat ja que tot són lletres correctes i ha encertat la paraula
       if (!paraulaEncertada.includes('_')) {
-        messageElement.textContent = 'Felicitats! Has guanyat!';
+        messageElement.textContent = 'Felicitats! Has guanyat peluxi!! ♥♥♥ 🦩'; // -> CANVIAR
         document.getElementById('checkLetter').disabled = true; // Desactivem el botó
       } else if (intentsRestants === 0) {
         // Si no queden intents, el jugador ha perdut
